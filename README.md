@@ -1,5 +1,5 @@
 <p align="center">
-  <img src=".github/banner.svg" alt="Onstage: screen recordings that come out finished" width="100%">
+  <img src=".github/banner.svg" alt="Onstage: live calls and recordings that look produced" width="100%">
 </p>
 
 <p align="center">
@@ -8,8 +8,9 @@
   <a href="https://github.com/abhinavakhil/onstage/releases/latest/download/Onstage-Setup.exe"><b>Download for Windows</b></a>
 </p>
 
-Onstage puts your camera, your screen and your brand on one stage. Switch layouts and zoom in while
-you talk, then stop recording and share the file. There is nothing to edit afterwards.
+Onstage puts your camera, your screen and your brand on one stage. Pick it as your camera in Zoom,
+Meet or Teams, or press record and share the file. Switch layouts and zoom in while you talk. There is
+nothing to edit afterwards.
 
 <p align="center">
   <img src="landing/assets/app-present.png" alt="The Onstage studio" width="88%">
