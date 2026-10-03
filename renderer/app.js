@@ -542,6 +542,7 @@
       if (e.key === 'ArrowUp') { items[Math.max(0, i - 1)].focus(); e.preventDefault(); }
     });
     document.addEventListener('click', close);
+    select.addEventListener('change', render);   // keep the label right when the value is set from code
     return render;
   }
   const paintCamSelect = dropdown($('camSelect')), paintMicSelect = dropdown($('micSelect'));
