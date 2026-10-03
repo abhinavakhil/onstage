@@ -3,8 +3,6 @@
 </p>
 
 <p align="center">
-  <a href="https://abhinavakhil.github.io/onstage/"><b>Website</b></a>
-  &nbsp;·&nbsp;
   <a href="https://github.com/abhinavakhil/onstage/releases/latest/download/Onstage-Setup.exe"><b>Download for Windows</b></a>
 </p>
 
