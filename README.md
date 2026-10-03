@@ -3,6 +3,8 @@
 </p>
 
 <p align="center">
+  <a href="https://onstage-v1.vercel.app/"><b>Website</b></a>
+  &nbsp;·&nbsp;
   <a href="https://github.com/abhinavakhil/onstage/releases/latest/download/Onstage-Setup.exe"><b>Download for Windows</b></a>
 </p>
 
