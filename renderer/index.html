@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob: https://*.giphy.com; media-src 'self' blob: file:; style-src 'self' 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; connect-src 'self' blob: data: https://api.giphy.com https://*.giphy.com">
+<title>Onstage</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <nav class="rail" aria-label="Sections">
+    <div id="railTabs" class="rail-tabs"></div>
+    <div class="rail-foot">
+      <button id="remoteBtn" class="rail-btn" title="Floating remote"><i data-icon="remote"></i><span>Remote</span></button>
+    </div>
+  </nav>
+
+  <aside class="panel">
+    <h1 id="panelTitle">Present</h1>
+
+    <div class="tab" data-tab="present">
+      <label class="select"><i data-icon="camera"></i><select id="camSelect" aria-label="Camera"></select></label>
+      <label class="select"><i data-icon="mic"></i><select id="micSelect" aria-label="Microphone"></select></label>
+      <div class="meter" title="Microphone level"><i id="micLevel"></i></div>
+
+      <h2>Screen</h2>
+      <div class="row">
+        <button id="shareBtn" class="source"><i class="source-icon" data-icon="present"></i><span id="sourceName">Choose a screen or window</span><i class="source-swap" data-icon="swap"></i></button>
+        <button id="clearContent" class="icon-btn" title="Stop sharing" aria-label="Stop sharing"><i data-icon="stop"></i></button>
+      </div>
+      <button id="slidesBtn" class="btn"><i data-icon="slides"></i>Load slides (PDF or images)</button>
+      <input id="slidesInput" type="file" accept="application/pdf,image/*" multiple hidden>
+      <div id="slideNav" class="row" hidden>
+        <button id="prevSlide" class="btn">Previous</button>
+        <span id="slideCount" class="count"></span>
+        <button id="nextSlide" class="btn">Next</button>
+      </div>
+
+      <h2>Device frame</h2>
+      <div id="frames" class="seg four"></div>
+
+      <h2>Layout</h2>
+      <div id="layouts" class="layouts"></div>
+
+      <label class="toggle-row">
+        <span>Cinematic Zoom</span>
+        <kbd>Ctrl Alt Z</kbd>
+        <input class="switch" type="checkbox" data-bind="zoom.on" checked>
+      </label>
+      <div class="hint">Zoom follows your mouse on a shared screen. On windows and slides, click the spot on the stage.</div>
+    </div>
+
+    <div class="tab" data-tab="videos" hidden>
+      <label class="select"><i data-icon="search"></i><input id="videoSearch" type="text" placeholder="Search a recording"></label>
+      <div id="videoList" class="video-list"></div>
+    </div>
+
+    <div class="tab" data-tab="camera" hidden>
+      <h2>Shape</h2>
+      <div id="shapes" class="seg"></div>
+      <label class="slider"><span>Size</span><input type="range" id="camSize" data-bind="camSize" min="0.1" max="0.5" step="0.01" value="0.26"></label>
+      <label class="toggle-row"><span>Mirror my camera</span><input class="switch" type="checkbox" data-bind="mirror" checked></label>
+
+      <h2>Virtual background</h2>
+      <div id="fxModes" class="seg"></div>
+      <div id="fxGradients" class="swatches"></div>
+      <input id="fxImage" type="file" accept="image/*" hidden>
+
+      <h2>Enhance</h2>
+      <label class="toggle-row"><span>Skin smoothing</span><input class="switch" type="checkbox" data-bind="fx.smooth"></label>
+      <label class="toggle-row"><span>Studio light</span><input class="switch" type="checkbox" data-bind="fx.light"></label>
+
+      <h2>Framing</h2>
+      <div id="camControls" class="stack">
+        <label class="slider"><span>Zoom</span><input type="range" data-bind="cam.zoom" min="1" max="3" step="0.01" value="1"></label>
+        <label class="slider"><span>Pan</span><input type="range" data-bind="cam.panX" min="-1" max="1" step="0.01" value="0"></label>
+        <label class="slider"><span>Tilt</span><input type="range" data-bind="cam.panY" min="-1" max="1" step="0.01" value="0"></label>
+        <h2>Colour</h2>
+        <label class="slider"><span>Exposure</span><input type="range" data-bind="cam.exposure" min="-0.5" max="0.5" step="0.01" value="0"></label>
+        <label class="slider"><span>Temperature</span><input class="temp" type="range" data-bind="cam.temp" min="-1" max="1" step="0.01" value="0"></label>
+        <label class="slider"><span>Tint</span><input class="tint" type="range" data-bind="cam.tint" min="-1" max="1" step="0.01" value="0"></label>
+        <label class="slider"><span>Saturation</span><input class="sat" type="range" data-bind="cam.sat" min="-1" max="1" step="0.01" value="0"></label>
+      </div>
+      <button id="camReset" class="btn">Reset camera controls</button>
+      <div class="hint">Drag your camera on the stage to move it. Scroll over it to resize.</div>
+    </div>
+
+    <div class="tab" data-tab="themes" hidden>
+      <h2>Background</h2>
+      <div id="backgrounds" class="swatches"></div>
+      <div class="row">
+        <label class="btn grow file">Upload image<input id="bgInput" type="file" accept="image/*" hidden></label>
+        <label class="btn color">Colour<input id="bgColor" type="color" value="#1f2937"></label>
+      </div>
+      <label class="slider"><span>Padding</span><input type="range" data-bind="padding" min="0" max="0.12" step="0.005" value="0.05"></label>
+      <label class="slider"><span>Corners</span><input type="range" data-bind="radius" min="0" max="60" step="1" value="24"></label>
+
+      <h2>Logo</h2>
+      <div class="row">
+        <label class="btn grow file">Upload logo<input id="logoInput" type="file" accept="image/*" hidden></label>
+        <button id="logoClear" class="btn" hidden>Remove</button>
+      </div>
+
+      <h2>Name tag</h2>
+      <label class="toggle-row"><span>Show name tag</span><input id="tagOn" class="switch" type="checkbox" data-bind="tag.on"></label>
+      <input class="text" type="text" data-bind="tag.name" placeholder="Your name" maxlength="40">
+      <input class="text" type="text" data-bind="tag.title" placeholder="Title or company" maxlength="60">
+      <div class="hint">Your name and title also appear on the camera-off screen.</div>
+
+      <h2>On-screen text</h2>
+      <input class="text" type="text" data-bind="caption" placeholder="Leave empty to hide" maxlength="90">
+    </div>
+
+    <div class="tab" data-tab="react" hidden>
+      <h2>Emojis</h2>
+      <div id="reactions" class="reactions"></div>
+      <h2>Effects</h2>
+      <button id="confettiBtn" class="btn">🎉 Confetti</button>
+
+      <h2>GIFs</h2>
+      <label id="gifSearchRow" class="select" hidden><i data-icon="search"></i><input id="gifSearch" type="text" placeholder="Search GIPHY, then press Enter"></label>
+      <div id="gifResults" class="gifs hint"></div>
+      <label class="btn file">Add GIF or sticker<input id="gifInput" type="file" accept="image/gif,image/webp,image/png,image/apng" multiple hidden></label>
+      <div id="gifLibrary" class="gifs"></div>
+      <div id="gifHint" class="hint">Add a GIF, then click it to play it on the stage.</div>
+      <div id="gifKeyHint" class="hint">To search GIPHY here, add your GIPHY API key in Settings.</div>
+    </div>
+
+    <div class="tab" data-tab="timer" hidden>
+      <div id="timerBig" class="timer-big">05:00</div>
+      <div id="timerPresets" class="seg four"></div>
+      <label class="slider"><span>Minutes</span><input id="timerMinutes" class="text" type="number" min="1" max="180" value="5"></label>
+      <div class="row">
+        <button id="timerToggle" class="btn primary grow">Start timer</button>
+        <button id="timerReset" class="btn">Reset</button>
+      </div>
+      <div class="hint">The timer shows on the stage while it runs, so your audience sees it too.</div>
+    </div>
+
+    <div class="tab" data-tab="settings" hidden>
+      <h2>Appearance</h2>
+      <div id="themes" class="seg"></div>
+      <h2>Recording</h2>
+      <label class="toggle-row"><span>3-second countdown</span><input class="switch" type="checkbox" data-bind="countdown" checked></label>
+      <h2>Shortcuts</h2>
+      <dl class="keys">
+        <dt>Layouts</dt><dd><kbd>Ctrl Alt 1–6</kbd></dd>
+        <dt>Cinematic Zoom</dt><dd><kbd>Ctrl Alt Z</kbd></dd>
+        <dt>Mute microphone</dt><dd><kbd>Ctrl Alt X</kbd></dd>
+        <dt>Record / stop</dt><dd><kbd>Ctrl Alt R</kbd></dd>
+        <dt>Timer</dt><dd><kbd>Ctrl Alt T</kbd></dd>
+        <dt>Applause</dt><dd><kbd>Ctrl Alt E</kbd></dd>
+        <dt>Confetti</dt><dd><kbd>Ctrl Alt C</kbd></dd>
+        <dt>Change slide</dt><dd><kbd>← →</kbd></dd>
+      </dl>
+      <div class="hint">Shortcuts work while another app is in front. On a Stream Deck, assign them with the Hotkey action.</div>
+      <h2>GIPHY</h2>
+      <input id="giphyKey" class="text" type="text" placeholder="GIPHY API key (optional)" autocomplete="off">
+      <div class="hint">Only used to search GIFs in React. Stored on this computer.</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <span id="status" class="status" hidden></span>
+      <button id="liveBtn" class="btn live" title="Open a clean window of your stage to share in Zoom, Meet or Teams"><i class="live-dot"></i><span id="liveLabel">Go live</span></button>
+      <button id="restartBtn" class="btn" hidden><i data-icon="restart"></i>Restart</button>
+      <button id="pauseBtn" class="btn" hidden>Pause</button>
+      <button id="recBtn" class="btn rec"><i data-icon="record"></i><span id="recLabel">New recording</span></button>
+    </header>
+
+    <div id="studio" class="studio">
+      <div id="toolbar" class="toolbar"></div>
+      <div class="stage">
+        <canvas id="stage" width="1920" height="1080"></canvas>
+        <div id="countdown" class="countdown" hidden></div>
+      </div>
+      <div id="slideStrip" class="slide-strip" hidden></div>
+    </div>
+
+    <div id="player" class="player" hidden>
+      <div id="playerEmpty" class="empty">No recordings yet. Press <b>New recording</b> to make your first one.</div>
+      <div id="playerBody" hidden>
+        <div class="player-head">
+          <div>
+            <input id="videoTitle" class="title-input" type="text" maxlength="80" aria-label="Recording title">
+            <div id="videoDate" class="hint"></div>
+          </div>
+          <div class="row">
+            <button id="trimBtn" class="btn"><i data-icon="trim"></i>Trim</button>
+            <button id="exportBtn" class="btn"><i data-icon="export"></i>Export</button>
+          </div>
+        </div>
+        <video id="video" controls></video>
+        <div id="trimBar" class="trim" hidden>
+          <label class="slider"><span>Start <b id="trimStartLabel">00:00</b></span><input id="trimStart" type="range" min="0" step="0.1" value="0"></label>
+          <label class="slider"><span>End <b id="trimEndLabel">00:00</b></span><input id="trimEnd" type="range" min="0" step="0.1" value="0"></label>
+          <div class="hint">Export saves only the part between Start and End.</div>
+        </div>
+        <div class="row">
+          <button id="revealBtn" class="link">Show in folder</button>
+          <button id="deleteBtn" class="link danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="picker" class="modal" hidden>
+  <div class="modal-card">
+    <header><h3>Choose what to share</h3><button id="pickerClose" class="link">Cancel</button></header>
+    <div id="pickerNote" class="note" hidden></div>
+    <div id="pickerGrid" class="sources"></div>
+  </div>
+</div>
+
+<div id="exportModal" class="modal" hidden>
+  <div class="modal-card narrow">
+    <header><h3 id="exportTitle">Export</h3><button id="exportClose" class="icon-btn plain" aria-label="Close"><i data-icon="close"></i></button></header>
+    <div class="modal-body">
+      <div class="hint">Video quality</div>
+      <div id="qualities" class="qualities"></div>
+      <label class="toggle-row"><span class="caps">Include audio</span><input id="exportAudio" class="switch" type="checkbox" checked></label>
+      <dl class="keys"><dt>Recording duration</dt><dd id="exportDuration"></dd></dl>
+      <div id="exportNote" class="hint"></div>
+      <div class="row end">
+        <button id="exportCancel" class="btn">Cancel</button>
+        <button id="exportStart" class="btn primary">Start export</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="vendor/pdf.min.js"></script>
+<script src="shared.js"></script>
+<script src="segmenter.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <!-- app-icon version: gradient arch on black -->
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c5f08e"/><stop offset=".55" stop-color="#9ad86a"/><stop offset="1" stop-color="#6fae6a"/></linearGradient></defs>
+  <rect width="48" height="48" rx="13" fill="#1c2e1f"/>
+  <path d="M13.5 37V23.500a10.500 10.500 0 0 1 21 0V37" fill="none" stroke="url(#g)" stroke-width="5.500" stroke-linecap="round"/>
+  <circle cx="24" cy="30" r="4.500" fill="#fff"/>
+</svg>

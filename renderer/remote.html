@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'">
+<title>Onstage remote</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="remote">
+  <div class="remote-head"><button id="close" title="Close remote" aria-label="Close remote"></button><span>⠿⠿⠿</span><i></i></div>
+  <div class="remote-actions">
+    <button id="mute" class="icon-btn" title="Turn microphone on/off (Ctrl Alt X)" aria-label="Mute microphone"><i data-icon="mic"></i></button>
+    <button id="react" class="icon-btn" title="Send a reaction" aria-label="Send a reaction"><i data-icon="react"></i></button>
+    <button id="timer" class="icon-btn" title="Start or pause the timer" aria-label="Timer"><i data-icon="timer"></i></button>
+    <button id="zoom" class="icon-btn" title="Cinematic Zoom (Ctrl Alt Z)" aria-label="Cinematic Zoom"><i data-icon="zoom"></i></button>
+  </div>
+  <img id="preview" class="remote-preview" alt="Live preview">
+  <div class="row">
+    <button id="share" class="source"><i class="source-icon" data-icon="present"></i><span id="sourceName">Choose a screen</span><i class="source-swap" data-icon="swap"></i></button>
+    <button id="stopShare" class="icon-btn" title="Stop sharing" aria-label="Stop sharing"><i data-icon="stop"></i></button>
+  </div>
+  <div id="layouts" class="layouts"></div>
+  <script src="shared.js"></script>
+  <script src="remote.js"></script>
+</body>
+</html>

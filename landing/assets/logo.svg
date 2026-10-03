@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <!-- a stage arch with one person standing in it -->
+  <rect width="48" height="48" rx="13" fill="#2f4b32"/>
+  <path d="M13.5 37V23.500a10.500 10.500 0 0 1 21 0V37" fill="none" stroke="#c5f08e" stroke-width="5.500" stroke-linecap="round"/>
+  <circle cx="24" cy="30" r="4.500" fill="#c5f08e"/>
+</svg>

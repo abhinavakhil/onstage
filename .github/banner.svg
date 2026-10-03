@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-label="Onstage: present and record in one take">
+  <defs>
+    <linearGradient id="stage" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4fbe9"/><stop offset="1" stop-color="#bfe3a6"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff0b8"/><stop offset="1" stop-color="#fff0b8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#2f4b32" flood-opacity=".22"/>
+    </filter>
+  </defs>
+  <style>
+    .bob { animation: bob 5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    .b2 { animation-delay: -1.2s; } .b3 { animation-delay: -2.4s; } .b4 { animation-delay: -3.6s; } .b5 { animation-delay: -0.6s; }
+    .pulse { animation: pulse 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    .glow { animation: drift 9s ease-in-out infinite alternate; }
+    .rise { animation: rise .9s ease-out both; }
+    .r2 { animation-delay: .15s; } .r3 { animation-delay: .3s; }
+    .swap { animation: swap 8s steps(1) infinite; }
+    .s2 { animation-delay: -6s; } .s3 { animation-delay: -4s; } .s4 { animation-delay: -2s; }
+    @keyframes bob { 0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); } 50% { transform: translateY(-9px) rotate(var(--tilt, 0deg)); } }
+    @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(.78); opacity: .7; } }
+    @keyframes drift { from { transform: translateX(-140px); } to { transform: translateX(180px); } }
+    @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes swap { 0% { opacity: 1; } 25%, 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } .swap { opacity: 0; } .s1 { opacity: 1; } }
+    text { font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif; }
+  </style>
+
+  <rect width="1200" height="420" rx="32" fill="url(#stage)"/>
+  <ellipse class="glow" cx="620" cy="150" rx="330" ry="210" fill="url(#glow)"/>
+
+  <!-- logo and name -->
+  <g class="rise">
+    <g class="bob" filter="url(#shadow)">
+      <rect x="96" y="120" width="96" height="96" rx="26" fill="#2f4b32"/>
+      <path d="M123 194v-27a21 21 0 0 1 42 0v27" fill="none" stroke="#c5f08e" stroke-width="11" stroke-linecap="round"/>
+      <circle cx="144" cy="180" r="9" fill="#c5f08e"/>
+    </g>
+  </g>
+  <text class="rise r2" x="216" y="190" font-size="76" font-weight="800" fill="#14201a" letter-spacing="-3">Onstage</text>
+  <text class="rise r3" x="98" y="278" font-size="30" font-weight="500" fill="#3c4f43">Screen recordings that come out finished.</text>
+  <g class="rise r3">
+    <rect x="96" y="312" width="238" height="40" rx="9" fill="#c5f08e"/>
+    <text x="112" y="339" font-size="19" font-weight="700" fill="#1f3a24">Present live. Record once.</text>
+  </g>
+
+  <!-- a stage that cycles through four layouts -->
+  <g filter="url(#shadow)">
+    <rect x="690" y="92" width="410" height="236" rx="20" fill="#ffffff"/>
+    <g class="swap s1">
+      <rect x="712" y="150" width="92" height="120" rx="12" fill="#2f4b32"/>
+      <rect x="820" y="114" width="258" height="192" rx="12" fill="#d9f2bd"/>
+    </g>
+    <g class="swap s2">
+      <rect x="712" y="114" width="176" height="192" rx="12" fill="#2f4b32"/>
+      <rect x="902" y="114" width="176" height="192" rx="12" fill="#d9f2bd"/>
+    </g>
+    <g class="swap s3">
+      <rect x="712" y="114" width="366" height="192" rx="12" fill="#d9f2bd"/>
+      <circle cx="766" cy="254" r="36" fill="#2f4b32" stroke="#ffffff" stroke-width="5"/>
+    </g>
+    <g class="swap s4">
+      <rect x="712" y="114" width="366" height="192" rx="12" fill="#2f4b32"/>
+      <circle cx="895" cy="190" r="26" fill="#c5f08e"/>
+      <path d="M845 270a50 44 0 0 1 100 0z" fill="#c5f08e"/>
+    </g>
+  </g>
+
+  <!-- floating controls -->
+  <g class="bob b2" style="--tilt: -8deg" filter="url(#shadow)">
+    <rect x="662" y="58" width="60" height="60" rx="18" fill="#2f4b32"/>
+    <rect x="685" y="72" width="14" height="24" rx="7" fill="none" stroke="#c5f08e" stroke-width="3.500"/>
+    <path d="M678 90a14 14 0 0 0 28 0M692 104v6" fill="none" stroke="#c5f08e" stroke-width="3.500" stroke-linecap="round"/>
+  </g>
+  <g class="bob b3" style="--tilt: 7deg" filter="url(#shadow)">
+    <rect x="1064" y="60" width="60" height="60" rx="18" fill="#ffffff"/>
+    <circle class="pulse" cx="1094" cy="90" r="12" fill="#e11d48"/>
+  </g>
+  <g class="bob b4" style="--tilt: 9deg" filter="url(#shadow)">
+    <rect x="1070" y="290" width="60" height="60" rx="18" fill="#ffffff"/>
+    <circle cx="1097" cy="317" r="11" fill="none" stroke="#2f4b32" stroke-width="3.500"/>
+    <path d="m1105 325 9 9M1097 312v10M1092 317h10" fill="none" stroke="#2f4b32" stroke-width="3.500" stroke-linecap="round"/>
+  </g>
+  <g class="bob b5" style="--tilt: -6deg" filter="url(#shadow)">
+    <rect x="652" y="296" width="60" height="60" rx="18" fill="#ffffff"/>
+    <text x="682" y="337" font-size="30" text-anchor="middle">👏</text>
+  </g>
+</svg>
