@@ -1,5 +1,5 @@
 <p align="center">
-  <img src=".github/banner.svg" alt="Onstage: look produced on every call" width="100%">
+  <img src=".github/banner.svg" alt="Onstage: What You See Is What You Get" width="100%">
 </p>
 
 <p align="center">
