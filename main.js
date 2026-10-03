@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const { pathToFileURL } = require('url');
+const vcam = require('./vcam');
 
 let win = null;
 let remote = null;            // floating mini remote, always on top
@@ -109,7 +110,19 @@ app.whenReady().then(async () => {
   app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });
 
-app.on('will-quit', () => globalShortcut.unregisterAll());
+app.on('will-quit', () => { globalShortcut.unregisterAll(); vcam.detach(); });
+
+// ---------- Onstage Camera: tell the studio when a call app has the camera open, and pass frames on ----------
+let camLive = false;
+setInterval(() => {
+  if (!win) return;
+  let live = false;
+  try { live = vcam.attach(); } catch (err) { console.error('camera driver', err); }
+  if (live !== camLive) { camLive = live; win.webContents.send('vcam:live', live); }
+}, 1000);
+ipcMain.on('vcam:frame', (_e, pixels, width, height) => {
+  try { vcam.send(Buffer.from(pixels), width, height); } catch (err) { console.error('camera frame', err); }
+});
 app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit(); });
 
 // ---------- screen sources ----------

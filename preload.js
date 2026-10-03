@@ -6,6 +6,8 @@ contextBridge.exposeInMainWorld('api', {
   selectSource: (id) => ipcRenderer.invoke('sources:select', id),
   openScreenSettings: () => ipcRenderer.invoke('system:openScreenSettings'),
   cursor: () => ipcRenderer.invoke('cursor:pos'),
+  onCamLive: (fn) => ipcRenderer.on('vcam:live', (_e, live) => fn(live)),
+  sendFrame: (pixels, width, height) => ipcRenderer.send('vcam:frame', pixels, width, height),
   setTheme: (color, symbolColor) => ipcRenderer.send('theme:set', color, symbolColor),
   recStart: (ext) => ipcRenderer.invoke('rec:start', ext),
   recChunk: (arrayBuffer) => ipcRenderer.invoke('rec:chunk', arrayBuffer),

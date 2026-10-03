@@ -22,6 +22,7 @@ you talk, then stop recording and share the file. There is nothing to edit after
 - **Virtual backgrounds**, skin smoothing and studio light, all processed on your computer
 - **Your brand**: backgrounds, logo, name tag, device frames
 - **Reactions, GIFs and an on-stage timer**
+- **Onstage Camera**: pick it as your camera in Zoom, Meet or Teams and the call sees your stage
 - **Go live**: a clean window of your stage to share in Zoom, Meet or Teams
 - **Video library** with trim and export at 1080p, 720p or 480p
 - **Floating remote** and global shortcuts (`Ctrl` `Alt` `1–6`, `Z`, `X`, `R`)
@@ -41,11 +42,13 @@ npm install
 npm start
 ```
 
+Running from source, the camera driver is not registered. To add it, run the two commands in
+[native/vcam/README.md](native/vcam/README.md) from an administrator prompt.
+
 Build the installer with `npm run dist:win` (or `npm run dist:mac` on a Mac). It lands in `dist/`.
 
 ## Not in this version
 
-- Onstage does not appear in the camera list of call apps; share the **Onstage Live** window instead
 - No direct iPhone or iPad capture, and no Stream Deck plugin (the shortcuts work with its Hotkey action)
 - macOS builds are untested
 
@@ -55,5 +58,6 @@ Build the installer with `npm run dist:win` (or `npm run dist:mac` on a Mac). It
 | --- | --- |
 | `main.js`, `preload.js` | Windows, permissions, screen sources, video library, global shortcuts |
 | `renderer/` | The studio UI, the compositor and recorder (`app.js`), the floating remote |
+| `vcam.js`, `native/vcam/` | Onstage Camera: the feed, and the open-source driver it feeds (UnityCapture, MIT) |
 | `renderer/vendor/` | pdf.js, the MediaPipe person-segmentation model, the Manrope font |
 | `landing/` | The website |

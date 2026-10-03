@@ -19,8 +19,8 @@
     <h1 id="panelTitle">Present</h1>
 
     <div class="tab" data-tab="present">
-      <label class="select"><i data-icon="camera"></i><select id="camSelect" aria-label="Camera"></select></label>
-      <label class="select"><i data-icon="mic"></i><select id="micSelect" aria-label="Microphone"></select></label>
+      <div class="select dd"><i data-icon="camera"></i><select id="camSelect" aria-label="Camera"></select></div>
+      <div class="select dd"><i data-icon="mic"></i><select id="micSelect" aria-label="Microphone"></select></div>
       <div class="meter" title="Microphone level"><i id="micLevel"></i></div>
 
       <h2>Screen</h2>
@@ -163,6 +163,7 @@
   <main class="main">
     <header class="topbar">
       <span id="status" class="status" hidden></span>
+      <span id="camStatus" class="cam-status" title="Pick Onstage Camera as your camera in Zoom, Meet or Teams"><i class="live-dot"></i>Camera idle</span>
       <button id="liveBtn" class="btn live" title="Open a clean window of your stage to share in Zoom, Meet or Teams"><i class="live-dot"></i><span id="liveLabel">Go live</span></button>
       <button id="restartBtn" class="btn" hidden><i data-icon="restart"></i>Restart</button>
       <button id="pauseBtn" class="btn" hidden>Pause</button>

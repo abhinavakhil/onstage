@@ -1,7 +1,7 @@
 {
   "name": "onstage",
   "productName": "Onstage",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Present and record with your camera on top of your screen or slides.",
   "main": "main.js",
   "author": "Abhinav Akhil",
@@ -23,11 +23,14 @@
     "files": [
       "main.js",
       "preload.js",
+      "vcam.js",
       "renderer/**/*"
     ],
     "mac": {
       "category": "public.app-category.video",
-      "target": ["dmg"],
+      "target": [
+        "dmg"
+      ],
       "icon": "build/icon.png",
       "hardenedRuntime": true,
       "entitlements": "build/entitlements.mac.plist",
@@ -38,9 +41,28 @@
       }
     },
     "win": {
-      "target": ["nsis"],
+      "target": [
+        "nsis"
+      ],
       "icon": "build/icon.png",
       "artifactName": "Onstage-Setup.${ext}"
+    },
+    "extraResources": [
+      {
+        "from": "native/vcam",
+        "to": "vcam",
+        "filter": [
+          "*.dll",
+          "LICENSE.txt"
+        ]
+      }
+    ],
+    "nsis": {
+      "perMachine": true,
+      "include": "build/installer.nsh"
     }
+  },
+  "dependencies": {
+    "koffi": "^3.3.2"
   }
 }

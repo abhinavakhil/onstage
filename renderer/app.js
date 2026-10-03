@@ -454,9 +454,15 @@
 
   const stop = (stream) => stream && stream.getTracks().forEach((t) => t.stop());
 
+  const isOwnCamera = (d) => /onstage camera/i.test(d.label);
   async function startCamera(deviceId) {
     stop(camStream); camStream = null;
     if (deviceId === 'off') return;
+    if (!deviceId) {
+      // the default device could be Onstage Camera itself, which would show the stage inside the stage
+      const real = (await navigator.mediaDevices.enumerateDevices()).find((d) => d.kind === 'videoinput' && d.deviceId && !isOwnCamera(d));
+      if (real) deviceId = real.deviceId;
+    }
     try {
       camStream = await navigator.mediaDevices.getUserMedia({
         video: { deviceId: deviceId ? { exact: deviceId } : undefined, width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 30 } },
@@ -491,10 +497,59 @@
     setRecUI();
   }
 
+  // A themed dropdown drawn over a hidden <select>. The select keeps the options and the value,
+  // so the rest of the code still reads select.value and listens for its change event.
+  function dropdown(select) {
+    const box = select.parentElement;
+    const button = Object.assign(document.createElement('button'), { type: 'button', className: 'dd-button' });
+    button.setAttribute('aria-haspopup', 'listbox');
+    button.setAttribute('aria-label', select.getAttribute('aria-label'));
+    const label = document.createElement('span');
+    const chevron = document.createElement('i');
+    chevron.dataset.icon = 'chevron';
+    button.append(label, chevron);
+    const menu = Object.assign(document.createElement('div'), { className: 'dd-menu', hidden: true });
+    menu.setAttribute('role', 'listbox');
+    select.hidden = true;
+    box.append(button, menu);
+    paintIcons(button);
+
+    const close = () => { menu.hidden = true; button.setAttribute('aria-expanded', 'false'); };
+    const render = () => {
+      label.textContent = select.selectedOptions[0] ? select.selectedOptions[0].text : '';
+      menu.innerHTML = '';
+      for (const option of select.options) {
+        const item = Object.assign(document.createElement('button'), { type: 'button', className: 'dd-item', textContent: option.text });
+        item.setAttribute('role', 'option');
+        item.setAttribute('aria-selected', String(option.selected));
+        item.onclick = () => { select.value = option.value; select.dispatchEvent(new Event('change')); render(); close(); button.focus(); };
+        menu.appendChild(item);
+      }
+    };
+    button.onclick = (e) => {
+      e.stopPropagation();
+      const open = menu.hidden;
+      document.querySelectorAll('.dd-menu').forEach((m) => { m.hidden = true; });
+      menu.hidden = !open;
+      button.setAttribute('aria-expanded', String(open));
+      if (open) (menu.querySelector('[aria-selected="true"]') || menu.firstElementChild)?.focus();
+    };
+    box.addEventListener('keydown', (e) => {
+      if (menu.hidden) return;
+      const items = [...menu.children], i = items.indexOf(document.activeElement);
+      if (e.key === 'Escape') { close(); button.focus(); e.stopPropagation(); }
+      if (e.key === 'ArrowDown') { items[Math.min(items.length - 1, i + 1)].focus(); e.preventDefault(); }
+      if (e.key === 'ArrowUp') { items[Math.max(0, i - 1)].focus(); e.preventDefault(); }
+    });
+    document.addEventListener('click', close);
+    return render;
+  }
+  const paintCamSelect = dropdown($('camSelect')), paintMicSelect = dropdown($('micSelect'));
+
   async function fillDevices() {
     const devices = await navigator.mediaDevices.enumerateDevices();
     const fill = (select, kind, current, label) => {
-      const list = devices.filter((d) => d.kind === kind);
+      const list = devices.filter((d) => d.kind === kind && !isOwnCamera(d));
       select.innerHTML = '';
       list.forEach((d, i) => select.add(new Option(d.label || `${label} ${i + 1}`, d.deviceId)));
       select.add(new Option(`No ${label.toLowerCase()}`, 'off'));
@@ -503,6 +558,7 @@
     };
     fill($('camSelect'), 'videoinput', camStream, 'Camera');
     fill($('micSelect'), 'audioinput', micStream, 'Microphone');
+    paintCamSelect(); paintMicSelect();
   }
 
   // ---------------------------------------------------------------- screen sharing
@@ -1241,6 +1297,23 @@
     toast(`“${v.title}” moved to the Recycle Bin.`);
   };
 
+  // Onstage Camera: while a call app has the camera open, send it the stage at 720p
+  const FEED_W = 1280, FEED_H = 720;
+  const feed = Object.assign(document.createElement('canvas'), { width: FEED_W, height: FEED_H });
+  const feedCtx = feed.getContext('2d', { willReadFrequently: true });
+  feedCtx.setTransform(1, 0, 0, -1, 0, FEED_H);   // the driver expects the bottom row first
+  let camLive = false;
+  function sendCameraFrame() {
+    if (!camLive) return;
+    feedCtx.drawImage(canvas, 0, 0, FEED_W, FEED_H);
+    api.sendFrame(feedCtx.getImageData(0, 0, FEED_W, FEED_H).data.buffer, FEED_W, FEED_H);
+  }
+  if (api) api.onCamLive((live) => { camLive = live; repaint(); });
+  painters.push(() => {
+    $('camStatus').classList.toggle('on', camLive);
+    $('camStatus').lastChild.textContent = camLive ? 'Camera live' : 'Camera idle';
+  });
+
   // remote
   let remoteOpen = false;
   $('remoteBtn').onclick = async () => { if (api) remoteOpen = await api.toggleRemote(); repaint(); };
@@ -1319,6 +1392,7 @@
   const levels = new Uint8Array(analyser.fftSize);
   setInterval(() => {
     draw();
+    sendCameraFrame();
     const now = performance.now();
     if (recState === 'recording') { elapsed += now - lastTick; lastTick = now; $('recLabel').textContent = fmt(elapsed); }
     const t = S.timer;
