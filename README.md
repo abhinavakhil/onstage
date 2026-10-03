@@ -31,7 +31,7 @@ you talk, then stop recording and share the file. There is nothing to edit after
 
 Download [Onstage-Setup.exe](https://github.com/abhinavakhil/onstage/releases/latest/download/Onstage-Setup.exe)
 and run it. The installer is not code-signed yet, so Windows shows a "Windows protected your PC" notice:
-choose **More info**, then **Run anyway**.
+choose **More info**, then **Run anyway**. It asks for administrator rights so it can add the Onstage Camera.
 
 ## Run from source
 
